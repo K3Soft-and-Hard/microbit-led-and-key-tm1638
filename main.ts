@@ -373,7 +373,6 @@ namespace K3TM1638 {
      */
     //% weight=200 blockGap=8
     //% blockId="K3TM1638_create" block="strobe %strobe|CLK %clk|DIO %dio||brightness %brightness|LED count %count"
-    //% block.loc.de="CLK %clk|DIO %dio|StrobePin %strobe|Intensität %intensity|LED Anzahl %count"
     export function create(strobe: DigitalPin, clk: DigitalPin, dio: DigitalPin, brightness: number = 5, count: number = 8): TM1638LEDs {
         let tm = new TM1638LEDs();
         tm.strobe = strobe;
