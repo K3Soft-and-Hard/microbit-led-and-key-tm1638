@@ -181,7 +181,7 @@ namespace K3TM1638 {
          * set TM1638 intensity, range is [0-7], 0 is off.
          * @param brightness the brightness of the TM1638, eg: 7
          */
-        //% blockId="TM1638_set_intensity" block="%tm|set intensity %brightness"
+        //% blockId="K3TM1638_set_intensity" block="%tm|set intensity %brightness"
         //% block.loc.de="%tm|setze Helligkeit %brightness"
         //% weight=50 blockGap=8
         //% parts="TM1638"
@@ -194,7 +194,7 @@ namespace K3TM1638 {
          * show a number.
          * @param num is a number, eg: 0
          */
-        //% blockId="TM1638_shownum" block="%tm|show number %num"
+        //% blockId="K3TM1638_shownum" block="%tm|show number %num"
         //% block.loc.de="%tm|zeige Zahl %num"
         //% weight=91 blockGap=8
         //% parts="TM1638"
@@ -202,8 +202,12 @@ namespace K3TM1638 {
             let strg = "" + num;
             let vals = strg.split('');
             let offset = 8 - vals.length;
-            for (let i = offset; i < 8; i++) {
-                this.show7Segment(i, fontMap[16 + parseInt(vals[i - offset])]);
+            for (let i = 0; i < 8; i++) {
+                if (i < offset) {
+                    this.show7Segment(i, fontMap[0]);
+                } else {
+                    this.show7Segment(i, fontMap[16 + parseInt(vals[i - offset])]);
+                }
             }
         }
 
@@ -211,14 +215,27 @@ namespace K3TM1638 {
          * shows text output on 7 segment displa<y
          * @param text text output to display
          */
-        //% blockId="TM1638_showText" block="%tm|display text %text"
+        //% blockId="K3TM1638_showText" block="%tm|display text %text"
         //% block.loc.de="%tm|gebe Text aus %text"
         //% weight=70 blockGap=8
         //% parts="TM1638"
         showText(text: string): void {
+            // convert string to array of chars
             let vals = text.toUpperCase().split('')
             for (let i = 0; i < Math.min(vals.length, 8); i++) {
                 this.show7Segment(i, fontMap[vals[i].charCodeAt(0) - 32]);
+            }
+        }
+
+        /**
+         * Display a string, scrolling from the right to left, speed adjustable.
+         * String starts off-screen right and scrolls until off - screen left.
+         */
+        scrollText(text: string, delay: number = 250) {
+            let mytext = text + "        ";
+            for (let i = 0; i < mytext.length - 8; i++) {
+                this.showText(mytext.substr(i, 8))
+                basic.pause(delay)
             }
         }
 
@@ -227,7 +244,7 @@ namespace K3TM1638 {
          * @param position display number
          * @param value byte value to show
          */
-        //% blockId="TM1638_show7seg" block="%tm|show 7 segment at %position|show %value"
+        //% blockId="K3TM1638_show7seg" block="%tm|show 7 segment at %position|show %value"
         //% block.loc.de="%tm|Ausgabe auf 7-Segment %position|Wert %value"
         //% weight=70 blockGap=8
         //% parts="TM1638"
@@ -245,7 +262,7 @@ namespace K3TM1638 {
          * @param on on/off
          * @param col color of led
          */
-        //% blockId="TM1638_setLed" block="%tm|turn LED %ledNum|on/off %on|color %col"
+        //% blockId="K3TM1638_setLed" block="%tm|turn LED %ledNum|on/off %on|color %col"
         //% block.loc.de="%tm|schalte LED %ledNum|ein/aus %on|Farbe %col"
         //% weight=70 blockGap=8
         //% parts="TM1638"
@@ -263,7 +280,7 @@ namespace K3TM1638 {
         /**
          * clear LED.
          */
-        //% blockId="TM1638_clear" block="clear %tm"
+        //% blockId="K3TM1638_clear" block="clear %tm"
         //% block.loc.de="lösche Ausgabe %tm"
         //% weight=80 blockGap=8
         //% parts="TM1638"
@@ -306,7 +323,7 @@ namespace K3TM1638 {
          * reads button states as binary number, Button 1 equals 1, Button 2 equals 2, Button 8 equals 128, etc.
          * Multiple pressed buttons can be detected.
          */
-        //% blockId="TM1638_readButtons" block="%tm read button states"
+        //% blockId="K3TM1638_readButtons" block="%tm read button states"
         //% block.loc.de="%tm Taster status"
         //% weight=80 blockGap=8
         //% parts="TM1638"
@@ -326,7 +343,7 @@ namespace K3TM1638 {
          * check if button is pressed
          * @param buttonNum button number to check. Starts with 1
          */
-        //% blockId="TM1638_buttonState" block="%tm button %buttonNum|pressed"
+        //% blockId="K3TM1638_buttonState" block="%tm button %buttonNum|pressed"
         //% block.loc.de="%tm Taster %buttonNum|gedrückt"
         //% weight=80 blockGap=8
         //% parts="TM1638"
@@ -334,6 +351,16 @@ namespace K3TM1638 {
         buttonPressed(buttonNum: number): boolean {
             return (this.readButtons() >> (buttonNum - 1) & 1) == 1
         }
+
+        //% blockId="K3TM1638_getBrightness" block="%tm brightness"
+        //% block.loc.de="%tm Taster status"
+        //% weight=80 blockGap=8
+        //% parts="TM1638"
+        getBrightness(): number {
+            return this.brightness;
+        }
+
+
     }
 
     /**
@@ -345,17 +372,18 @@ namespace K3TM1638 {
      * @param count the count of the LED, eg: 8
      */
     //% weight=200 blockGap=8
-    //% blockId="TM1638_create" block="CLK %clk|DIO %dio|strobe %strobe|intensity %intensity|LED count %count"
+    //% blockId="K3TM1638_create" block="strobe %strobe|CLK %clk|DIO %dio||brightness %brightness|LED count %count"
     //% block.loc.de="CLK %clk|DIO %dio|StrobePin %strobe|Intensität %intensity|LED Anzahl %count"
-    export function create(clk: DigitalPin, dio: DigitalPin, strobe: DigitalPin, intensity: number, count: number): TM1638LEDs {
+    export function create(strobe: DigitalPin, clk: DigitalPin, dio: DigitalPin, brightness: number = 5, count: number = 8): TM1638LEDs {
         let tm = new TM1638LEDs();
+        tm.strobe = strobe;
         tm.clk = clk;
         tm.dio = dio;
-        tm.strobe = strobe;
         if ((count < 1) || (count > 9)) count = 8;
         tm.count = count;
-        tm.brightness = intensity;
+        tm.brightness = brightness;
         tm.setup();
         return tm;
     }
+
 }
