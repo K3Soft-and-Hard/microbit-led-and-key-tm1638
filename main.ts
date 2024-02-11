@@ -237,7 +237,7 @@ namespace K3TM1638 {
         //% parts="TM1638"
         scrollText(text: string, delay: number = 250) {
             let mytext = text + "        ";
-            for (let i = 0; i < mytext.length - 8; i++) {
+            for (let i = 0; i <= mytext.length - 8; i++) {
                 this.showText(mytext.substr(i, 8))
                 basic.pause(delay)
             }
