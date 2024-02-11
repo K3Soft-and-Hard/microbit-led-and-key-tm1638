@@ -134,10 +134,15 @@ namespace K3TM1638 {
             pins.digitalWritePin(this.clk, 1);
             pins.digitalWritePin(this.dio, 0);
             pins.digitalWritePin(this.strobe, 1);
+            this.sendCommand(143);
+            this.setBrightness(this.brightness);
+            this.clear();
+            /*
             //this.sendCommand(143);
             this.clear();
             this._write_data_cmd()
             //this.setBrightness(this.brightness);
+            */
         }
 
         startCommand(): void {
