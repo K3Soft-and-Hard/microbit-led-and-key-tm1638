@@ -11,18 +11,6 @@
 //% weight=100 color=#50A820 icon="8"
 namespace K3TM1638 {
 
-    const TM1638_CMD1 = 0x40    // data command
-    const TM1638_CMD2 = 0xC0    // address command
-    const TM1638_CMD3 = 0x80    // display control command
-    const TM1638_DSP_ON = 0x08  // display on
-    const TM1638_READ = 0x02    // read key scan data
-    const TM1638_FIXED = 0x04   // fixed address mode
-
-    export enum Color {
-        RED = 0,
-        GREEN = 1
-    }
-
     const fontMap = [
         0x00, /* (space) */
         0x86, /* ! */
@@ -117,6 +105,19 @@ namespace K3TM1638 {
         0x5B, /* z */
     ]
 
+    const TM1638_CMD1 = 0x40    // data command
+    const TM1638_CMD2 = 0xC0    // address command
+    const TM1638_CMD3 = 0x80    // display control command
+    const TM1638_DSP_ON = 0x08  // display on
+    const TM1638_READ = 0x02    // read key scan data
+    const TM1638_FIXED = 0x04   // fixed address mode
+
+    export enum Color {
+        RED = 0,
+        GREEN = 1
+    }
+
+
     /**
      * TM1638 LED display
      */
@@ -134,15 +135,8 @@ namespace K3TM1638 {
             pins.digitalWritePin(this.clk, 1);
             pins.digitalWritePin(this.dio, 0);
             pins.digitalWritePin(this.strobe, 1);
-            this.sendCommand(143);
             this.setBrightness(this.brightness);
             this.clear();
-            /*
-            //this.sendCommand(143);
-            this.clear();
-            this._write_data_cmd()
-            //this.setBrightness(this.brightness);
-            */
         }
 
         startCommand(): void {
@@ -326,29 +320,6 @@ namespace K3TM1638 {
             }
             this.endCommand();
             return keys
-
-        /*            
-            this.startCommand();
-            this.writeByte(0x42);
-            basic.pause(1);
-            let buttons = 0;
-            let buttons2 = 0;
-            let buttons3 = 0;
-            let v = 0;
-            let v2 = 0;
-            let v3 = 0;
-            for (let i = 0; i < 4; i++) {
-                let byte = this.readByte();
-                v = (byte & 0b00100010) << i;
-                v2 = (byte & 0b01000100) << i;
-                v3 = (byte & 0b10001000) << i;
-                buttons |= v;
-                buttons2 |= v2;
-                buttons3 |= v3;
-            }
-            this.endCommand();
-            return buttons + (buttons2 * 255) + (buttons3 * 255 * 255);
-            */
         }
 
         /**
