@@ -231,6 +231,10 @@ namespace K3TM1638 {
          * Display a string, scrolling from the right to left, speed adjustable.
          * String starts off-screen right and scrolls until off - screen left.
          */
+        //% blockId="K3TM1638_scrollText" block="%tm|scroll text %text|delay %delay"
+        //% block.loc.de="%tm|gebe Text aus %text"
+        //% weight=70 blockGap=8
+        //% parts="TM1638"
         scrollText(text: string, delay: number = 250) {
             let mytext = text + "        ";
             for (let i = 0; i < mytext.length - 8; i++) {
@@ -368,7 +372,7 @@ namespace K3TM1638 {
      * @param clk the CLK pin for TM1638, eg: DigitalPin.P1
      * @param dio the DIO pin for TM1638, eg: DigitalPin.P2
      * @param strobe the Strobe pin for TM1638, eg. DigitalPin.P0
-     * @param intensity the brightness of the LED, eg: 7
+     * @param brightness the brightness of the LED, eg: 7
      * @param count the count of the LED, eg: 8
      */
     //% weight=200 blockGap=8
