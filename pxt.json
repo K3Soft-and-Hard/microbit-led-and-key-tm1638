@@ -1,5 +1,5 @@
 {
-    "name": "LED & KEY",
+    "name": "LED & KEY library",
     "description": "",
     "dependencies": {
         "core": "*",
