@@ -371,8 +371,8 @@ namespace K3TM1638 {
      * create a TM1638 object.
      * @param clk the CLK pin for TM1638, eg: DigitalPin.P1
      * @param dio the DIO pin for TM1638, eg: DigitalPin.P2
-     * @param strobe the Strobe pin for TM1638, eg. DigitalPin.P0
-     * @param brightness the brightness of the LED, eg: 7
+     * @param strobe the Strobe pin for TM1638, eg: DigitalPin.P0
+     * @param brightness the brightness of the LED (0 - 7), eg: 5
      * @param count the count of the LED, eg: 8
      */
     //% weight=200 blockGap=8
